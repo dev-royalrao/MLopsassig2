@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: olivetti-deployment
+  labels:
+    app: olivetti
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: olivetti
+  template:
+    metadata:
+      labels:
+        app: olivetti
+    spec:
+      containers:
+        - name: olivetti
+          image: royal0101/olivetti-flask:latest
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
